@@ -6,7 +6,7 @@ var files = require('./files.js');
 describe('asset loader', function() {
 
   describe('success', function() {
-    this.timeout(5000);
+    this.timeout(10000);
 
     var complete = false;
     var loadProgress;
@@ -29,6 +29,11 @@ describe('asset loader', function() {
       url: files.json,
       type: 'json'
     })
+    .add({
+      url: files.jsonp,
+      type: 'jsonp',
+      callback: 'dataCallback'
+    })
     .add(files.text)
     .add(files.images);
 
@@ -46,6 +51,7 @@ describe('asset loader', function() {
         // manual tests to view on karma debug page:
         document.body.appendChild(loader.get(files.image));
         document.body.appendChild(loader.get(files.imageXHR));
+        document.body.insertAdjacentHTML('beforeend', JSON.stringify(loader.get(files.jsonp)));
         document.body.insertAdjacentHTML('beforeend', JSON.stringify(loader.get(files.json)));
         loader.get(files.audio).setAttribute('controls', 'controls');
         document.body.appendChild(loader.get(files.audio));
@@ -93,6 +99,12 @@ describe('asset loader', function() {
       expect(loader.get(files.json)).to.exist;
       expect(loader.get(files.json)).to.be.an('object');
       expect(loader.get(files.json).name).to.be.a('string');
+    });
+
+    it ('should have loaded jsonp', function() {
+      expect(loader.get(files.jsonp)).to.exist;
+      expect(loader.get(files.jsonp)).to.be.an('object');
+      expect(loader.get(files.jsonp).data[0].name).to.be.a('string');
     });
 
     it ('should have recorded stats', function() {

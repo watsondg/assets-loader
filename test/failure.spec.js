@@ -19,7 +19,8 @@ describe('asset loader', function() {
       {url: 'http://www.example.com/fooBlob.jpg', useImageXHR: true},
       'http://www.example.com/foo.ogg',
       'http://www.example.com/foo.webm',
-      'http://www.example.com/foo.json'
+      'http://www.example.com/foo.json',
+      {url: 'http://www.example.com/foo.jsonp', type: 'jsonp', timeout: 2000}
     ];
 
     badFiles.forEach(function(file) {
@@ -53,6 +54,5 @@ describe('asset loader', function() {
       expect(errorMessages.length).to.eql(badFiles.length);
       expect(errorMessages[0]).to.be.a('string');
     });
-
   });
 });

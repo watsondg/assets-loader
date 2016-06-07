@@ -20,6 +20,9 @@
   "json": [
     "https://dl.dropboxusercontent.com/u/15470024/prototypes/test/test.json"
   ],
+  "jsonp": [
+    "https://api.github.com/orgs/watsondg/repos?callback=dataCallback"
+  ],
   "text": [
     "https://dl.dropboxusercontent.com/u/15470024/prototypes/video/tracking/tracking_01.txt"
   ]

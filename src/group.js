@@ -229,7 +229,8 @@ module.exports = function createGroup(config) {
         touchLocked: false,
         crossOrigin: null,
         webAudioContext: null,
-        log: false
+        log: false,
+        timeout: 10000
     });
 
     if (Array.isArray(config.assets)) {

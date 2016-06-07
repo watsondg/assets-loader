@@ -3,6 +3,7 @@
 var Emitter = require('./emitter.js');
 var browserHasBlob = require('./browser-has-blob.js');
 var stats = require('./stats');
+var jsonp = require('./jsonp');
 
 module.exports = function(options) {
     var id = options.id;
@@ -28,6 +29,9 @@ module.exports = function(options) {
         switch (type) {
             case 'json':
                 loadJSON();
+                break;
+            case 'jsonp':
+                loadJSONP();
                 break;
             case 'jpg':
             case 'png':
@@ -115,6 +119,24 @@ module.exports = function(options) {
                 }
                 dispatchComplete(data);
             }
+        });
+    };
+
+    // jsonp
+
+    var loadJSONP = function() {
+        var opts = {
+            timeout: options.timeout
+        };
+        if (id) {
+            opts.name = id + 'Callback';
+        }
+        if (options.callback) {
+            opts.name = options.callback;
+        }
+        jsonp(basePath + url, opts, function(err, data) {
+            if (err) errorHandler(err);
+            else dispatchComplete(data);
         });
     };
 
