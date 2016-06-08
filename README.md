@@ -49,7 +49,7 @@ var loader = new AssetsLoader({
     .start();
 ```
 
-More usage and examples on the (original project's page)[https://github.com/ianmcgregor/assets-loader].
+More usage and examples on the [original project's page](https://github.com/ianmcgregor/assets-loader).
 
 See [all supported formats here](https://github.com/watsondg/assets-loader/blob/6cef8e19be7a0ae3b76ddbb028b6488f472eee72/src/loader.js#L29-L62).
 
@@ -73,6 +73,10 @@ Add a subloader.
 ### start()
 
 Start loading the assets.
+
+### get(id)
+
+Return the loaded file.
 
 ### getLoader(id)
 
