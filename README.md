@@ -1,37 +1,28 @@
-# assets-loader
-
-[![NPM version](https://badge.fury.io/js/assets-loader.svg)](http://badge.fury.io/js/assets-loader) [![Bower version](https://badge.fury.io/bo/assets-loader.svg)](http://badge.fury.io/bo/assets-loader) [![Build Status](https://secure.travis-ci.org/ianmcgregor/assets-loader.png)](https://travis-ci.org/ianmcgregor/assets-loader)
+assets-loader
+===
 
 A simple batch assets loader.
+This is a fork from (Ian McGregor's assets-loader)[https://github.com/ianmcgregor/assets-loader].
 
-<http://ianmcgregor.github.io/assets-loader/examples/>
+### Install
 
-### Installation
-
-npm:
 ```
-npm install assets-loader --save-dev
-```
-bower:
-```
-bower install assets-loader --save-dev
+npm install watsondg/assets-loader --S
 ```
 
 ### Usage
 
 ```javascript
-var assetsLoader = require('assets-loader');
+var AssetsLoader = require('assets-loader');
 
 // load some assets:
 
-var loader = assetsLoader({
+var loader = new AssetsLoader({
         assets: [
             // image
             '/images/picture.png',
             // image with crossorigin
             { url: '/images/picture.jpg', crossOrigin: 'anonymous' },
-            // image without extension
-            { url: 'http://lorempixel.com/100/100', type: 'jpg' },
             // image as blob
             { url: '/images/picture.webp', blob: true },
             // specify id for retrieval
@@ -40,100 +31,64 @@ var loader = assetsLoader({
             'data.json',
             { url: 'data.json' },
             { url: '/endpoint', type: 'json' },
+            // jsonp
+            { url: '/endpoint', type: 'jsonp' },
+            { url: 'data.json', type: 'jsonp', callback: 'dataCallback', timeout: 5000 },
             // video
             'video.webm',
-            { url: 'video.webm' },
             { url: 'video.mp4', blob: true },
             // audio
             'audio.ogg',
             { url: 'audio.ogg', blob: true },
             { url: 'audio.mp3', webAudioContext: audioContext },
-            // binary / arraybuffer
-            'binary_file.bin',
-            { url: 'binary_file', type: 'bin' },
-            // text
-            'text_file.txt',
-            { url: 'text_file', type: 'text' }
         ]
     })
-    .on('error', function(error) {
-        console.error(error);
-    })
-    .on('progress', function(progress) {
-        console.log((progress * 100).toFixed() + '%');
-    })
     .on('complete', function(assets) {
-        assets.forEach(function(asset) {
-            console.log(asset);
-        });
-        // get by id from loader instance
         console.log(loader.get('picture'));
     })
     .start();
-
-// add assets in separate steps
-
-var loader = assetsLoader()
-    .add('audio.mp3')
-    .add('picture.jpg')
-    .add([
-        'a.png',
-        'b.png'
-    ])
-    .add({
-        id: 'video',
-        url: 'video.webm'
-    })
-    .add({
-        id: 'sounds',
-        assets: [
-            { id: 'a', url: 'a.mp3' },
-            { id: 'b', url: 'b.mp3' }
-        ]
-    })
-    .on('complete', function(assets) {
-        console.log(assets);
-        console.log(loader.get('video'));
-        console.log(loader.get('sounds'));
-    })
-    .start();
-
-// configure values for every file
-
-var loader = assetsLoader({
-    blob: true, // only works if browser supports
-    crossOrigin: 'anonymous',
-    webAudioContext: audioContext,
-    assets: [
-        { id: 'a', url: 'a.mp3' },
-        { id: 'b', url: 'b.jpg' },
-        // override blob setting for this file
-        { id: 'c', url: 'c.jpg', blob: false }
-    ]
-});
-
-// destroy
-
-loader.destroy();
-loader.getLoader('groupId').destroy();
-
-// stats
-
-console.log(assetsLoader.stats.getMbps()); // e.g. 3.2
-assetsLoader.stats.log(); // e.g. Total loaded: 2.00mb time: 2.00s speed: 1.00mbps
 ```
 
-### Dev setup
+More usage and examples on the (original project's page)[https://github.com/ianmcgregor/assets-loader].
 
-To install dependencies:
+See [all supported formats here](https://github.com/watsondg/assets-loader/blob/6cef8e19be7a0ae3b76ddbb028b6488f472eee72/src/loader.js#L29-L62).
 
-```
-$ npm install
-```
+## Instance Methods
 
-To run tests:
+### new AssetsLoader([options])
 
-```
-$ npm install -g karma-cli
-$ karma start
-```
+Create a new instance of VideoCache.
+* `options` - (OPTIONAL) - configuration parameters. Can be an URL or an object containing the following properties:
+- assets: an array of files to load. It can be a string (url) or an object containing an `url ` property as well as an `id` for easier retrieval, as well as any of the following parameters.
+- basePath: the base URL to prepend to the file URL.
+- blob: force loading by Blob if supported.
+- crossOrigin: for image loading.
+- webAudioContext: a pre-existing audio context to use.
+
+### add([options])
+
+Add a subloader.
+* `options` - (OPTIONAL) - configuration parameters, same as constructor.
+
+### start()
+
+Start loading the assets.
+
+### getLoader(id)
+
+Return a subloader.
+
+### destroy()
+
+Stop loading and dispose the instance.
+
+## Instance Events
+
+### error
+### progress
+### complete
+### childcomplete
+### destroy
+
+## License
+MIT.
